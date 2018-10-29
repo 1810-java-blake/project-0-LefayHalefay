@@ -9,24 +9,184 @@
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/lyrics.css" />
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/bootstrap-4.1.3/css/bootstrap.css"/>
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/bootstrap-4.1.3/css/bootstrap-grid.css"/>
-   <script src="JS/lyrics.js"></script>
+   <!-- <script src="JS/lyrics.js"></script> -->
 </head>
-<body>
+<body style="padding: 1%;">
    <main>
       <div style="margin: auto;" align = "center"> 
-         <h1 style=" padding-top: 15%; color: #F59742;font-size: 370%;";> Search Lyrics & Video of Your Favorite Songs!</h1> 
+         <h1 id="mainTitle"> Search Videos of Your Favorite Songs!</h1> 
       </div>
-      <div class="col-8 form-group" style="margin: auto; padding-top: 7%;" >
+      <div class="col-8 form-group" style="margin: auto; padding-top: 4%;">
          <label style="color:white; font-weight: bolder;" for="songArtistSearchText"></label>
          <input type="text" class="form-control" id="songArtistSearchText" placeholder="Type Artist and Song name">
-         <div style="padding-top:2%; padding-left: 40%;">
+         <div style="padding-top:2%; padding-left: 45%;">
             <button  id="searchBtn" type="button" class="btn-primary btn-lg btn-danger">Search</button>
+         </div> 
+      </div>
+      <div class="row">
+         <div id="iframeDiv" class="col-5">
+            <iframe id="youtubeVideoPlayer"width="560" height="315" src="https://www.youtube.com/embed/ZbZSe6N_BXs?controls=0" frameborder="1"
+                     allow="autoplay; encrypted-media" allowfullscreen>
+            </iframe>
+         </div>
+         <div class="col-5" id="lyricsDiv">
+               <h2 id = "songLyricsTitle" style="text-align:center;"> Happy </h2>
+               <p id="lyricsParagraph"style="padding-left: 10%; padding-right: 10%;">  
+                  It might seem crazy what I'm 'bout to say
+                  Sunshine she's here, you can take a break
+                  I'm a hot air balloon that could go to space
+                  With the air, like I don't care baby by the way
+                  Huh, because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do
+                  Here come bad news, talking this and that
+                  (Yeah) Well, give me all you got, and don't hold it back 
+                  (Yeah) Well, I should probably warn you I'll be just fine 
+                  (Yeah) No offense to you, don't waste your time
+                  Here's why
+                  Because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do
+                  Hey, come on, uh
+                  Bring me down, can't nuthin' (happy)
+                  Bring me down
+                  My level is too high to bring me down (happy)
+                  Can't nuthin', bring me down (happy)
+                  I said, let me tell you now, unh (happy)
+                  Bring me down, can't nuthin', bring me down (happy, happy, happy)
+                  My level is too high to bring me down (happy, happy, happy)
+                  Can't nuthin' bring me down (happy, happy, happy)
+                  I said
+                  Because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do
+                  Because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do
+                  Come on, unh bring me down can't nuthin' (happy, happy, happy)
+                  Bring me down my level is too high (happy, happy, happy)
+                  Bring me down can't nuthin' (happy, happy, happy)
+                  Bring me down, I said
+                  Because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you, eh eh eh 
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do
+                  Because I'm happy
+                  Clap along if you feel like a room without a roof
+                  Because I'm happy
+                  Clap along if you feel like happiness is the truth
+                  Because I'm happy
+                  Clap along if you know what happiness is to you, eh hey
+                  Because I'm happy
+                  Clap along if you feel like that's what you wanna do, heh come on
+               </p>
          </div>
       </div>
    </main>
-   
 </body>
 </html>
 <script>
-   document.body.style.backgroundImage = "url('drizzyDrake.jpeg')"
+   document.body.style.backgroundImage = "url('assets/drizzyDrake.jpeg')"
+
+   let videoIdd;
+   function ajax(url, success, failure) {
+   let xhr = new XMLHttpRequest();
+
+   xhr.onreadystatechange = () => {
+
+       if (xhr.readyState === 4) {
+           let resJSON = xhr.response;
+           if (xhr.status === 200) { 
+               let resObj = JSON.parse(resJSON);
+               success(resObj);
+           } else {
+               failure(resJSON, xhr.status);
+           }
+       }
+   };
+
+   xhr.open('GET', url);
+   xhr.send();
+   console.log("end of ajax function.");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+      let ytbBtn = document.getElementById("searchBtn");
+
+      ytbBtn.addEventListener("click", event => {
+
+         let searchPhrase = document.getElementById("songArtistSearchText").value;
+         let searchPhraseDelimited = searchPhrase.replace(/[\. ,:-]+/g, "+");
+         let searchPhraseForLyrics = searchPhrase.replace(/[\. ,:-]+/g, "%20");
+        
+         console.log(searchPhraseForLyrics);
+         let singerNameForLyrics = searchPhrase.substr(0,searchPhrase.indexOf(' '));
+         let searchPhraseForLyricsNoName = searchPhraseDelimited.substr(searchPhraseDelimited.indexOf('+')+1);
+         let lyricsParagraphBody = document.getElementById("lyricsParagraph");
+         let lyricsParagraphTitle = document.getElementById("songLyricsTitle");
+         
+         console.log(singerNameForLyrics);
+         console.log(searchPhraseDelimited);
+         console.log(searchPhraseForLyrics);
+         
+         let searchPhrase1 = "Halsey+Bad+At+Love";
+         let srcIframeYoutube = document.getElementById("youtubeVideoPlayer");
+         let videoSrc;
+         let picSrcc;
+
+         ajax(
+            `https://orion.apiseeds.com/api/music/lyric/${singerNameForLyrics}/${searchPhraseForLyricsNoName}?apikey=qD6BUVcjASN840eoSKOkLMb1GilQNCN8jRdM8rJUNBnwF8tW0lnkHvNdDVOYJcHE`,
+            obj => { 
+               console.log(obj.result.track.name);
+               console.log(obj.result.track.text);
+               lyricsParagraphTitle.innerHTML = obj.result.track.name;
+               lyricsParagraphBody.innerHTML = obj.result.track.text;
+
+            },
+            (res, status) => {
+
+               lyricsParagraphTitle.innerHTML = " ";
+               lyricsParagraphBody.innerHTML = "Lyrics Not Found";
+               console.log("No Lyrics Was found for Song!");
+            }
+         )
+         fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchPhraseDelimited}&key=AIzaSyAn9TqGyVC8GpCsNfszZlckoFkiqWWF2CA`)
+         .then(resObj => resObj.json())
+         .then(resObj => {
+             videoIdd = resObj.items[0].id.videoId;
+             picSrcc = resObj.items[0].snippet.thumbnails.medium.url;
+            })
+        .then(()=>{
+             document.getElementById("youtubeVideoPlayer").src = `https://www.youtube.com/embed/${videoIdd}?controls=0`;
+             document.body.style.backgroundImage = `url(${picSrcc})`;
+             //window.open('youtube.html', '_blank');
+             document.getElementById('youtubeVideoPlayer').contentWindow.location.reload(true);
+            }
+        ).catch(err=>console.log(err)); 
+      });
+});
 </script>
