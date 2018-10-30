@@ -9,12 +9,12 @@
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/lyrics.css" />
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/bootstrap-4.1.3/css/bootstrap.css"/>
    <link rel="stylesheet" type="text/css" media="screen" href="CSS/bootstrap-4.1.3/css/bootstrap-grid.css"/>
-   <!-- <script src="JS/lyrics.js"></script> -->
+   <script src="JS/lyrics.js"></script>
 </head>
 <body style="padding: 1%;">
    <main>
       <div style="margin: auto;" align = "center"> 
-         <h1 id="mainTitle"> Search Videos of Your Favorite Songs!</h1> 
+         <h1 id="mainTitle"> Search Videos and Lyrics of Your Favorite Songs!</h1> 
       </div>
       <div class="col-8 form-group" style="margin: auto; padding-top: 4%;">
          <label style="color:white; font-weight: bolder;" for="songArtistSearchText"></label>
@@ -111,82 +111,4 @@
 </html>
 <script>
    document.body.style.backgroundImage = "url('assets/drizzyDrake.jpeg')"
-
-   let videoIdd;
-   function ajax(url, success, failure) {
-   let xhr = new XMLHttpRequest();
-
-   xhr.onreadystatechange = () => {
-
-       if (xhr.readyState === 4) {
-           let resJSON = xhr.response;
-           if (xhr.status === 200) { 
-               let resObj = JSON.parse(resJSON);
-               success(resObj);
-           } else {
-               failure(resJSON, xhr.status);
-           }
-       }
-   };
-
-   xhr.open('GET', url);
-   xhr.send();
-   console.log("end of ajax function.");
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-      let ytbBtn = document.getElementById("searchBtn");
-
-      ytbBtn.addEventListener("click", event => {
-
-         let searchPhrase = document.getElementById("songArtistSearchText").value;
-         let searchPhraseDelimited = searchPhrase.replace(/[\. ,:-]+/g, "+");
-         let searchPhraseForLyrics = searchPhrase.replace(/[\. ,:-]+/g, "%20");
-        
-         console.log(searchPhraseForLyrics);
-         let singerNameForLyrics = searchPhrase.substr(0,searchPhrase.indexOf(' '));
-         let searchPhraseForLyricsNoName = searchPhraseDelimited.substr(searchPhraseDelimited.indexOf('+')+1);
-         let lyricsParagraphBody = document.getElementById("lyricsParagraph");
-         let lyricsParagraphTitle = document.getElementById("songLyricsTitle");
-         
-         console.log(singerNameForLyrics);
-         console.log(searchPhraseDelimited);
-         console.log(searchPhraseForLyrics);
-         
-         let searchPhrase1 = "Halsey+Bad+At+Love";
-         let srcIframeYoutube = document.getElementById("youtubeVideoPlayer");
-         let videoSrc;
-         let picSrcc;
-
-         ajax(
-            `https://orion.apiseeds.com/api/music/lyric/${singerNameForLyrics}/${searchPhraseForLyricsNoName}?apikey=qD6BUVcjASN840eoSKOkLMb1GilQNCN8jRdM8rJUNBnwF8tW0lnkHvNdDVOYJcHE`,
-            obj => { 
-               console.log(obj.result.track.name);
-               console.log(obj.result.track.text);
-               lyricsParagraphTitle.innerHTML = obj.result.track.name;
-               lyricsParagraphBody.innerHTML = obj.result.track.text;
-
-            },
-            (res, status) => {
-
-               lyricsParagraphTitle.innerHTML = " ";
-               lyricsParagraphBody.innerHTML = "Lyrics Not Found";
-               console.log("No Lyrics Was found for Song!");
-            }
-         )
-         fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchPhraseDelimited}&key=AIzaSyAn9TqGyVC8GpCsNfszZlckoFkiqWWF2CA`)
-         .then(resObj => resObj.json())
-         .then(resObj => {
-             videoIdd = resObj.items[0].id.videoId;
-             picSrcc = resObj.items[0].snippet.thumbnails.medium.url;
-            })
-        .then(()=>{
-             document.getElementById("youtubeVideoPlayer").src = `https://www.youtube.com/embed/${videoIdd}?controls=0`;
-             document.body.style.backgroundImage = `url(${picSrcc})`;
-             //window.open('youtube.html', '_blank');
-             document.getElementById('youtubeVideoPlayer').contentWindow.location.reload(true);
-            }
-        ).catch(err=>console.log(err)); 
-      });
-});
 </script>
