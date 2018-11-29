@@ -19,8 +19,8 @@
             let picSrcc;
 
             ajax(
-            `https://orion.apiseeds.com/api/music/lyric/${singerNameForLyrics}/${searchPhraseForLyricsNoName}?apikey=qD6BUVcjASN840eoSKOkLMb1GilQNCN8jRdM8rJUNBnwF8tW0lnkHvNdDVOYJcHE`,
-            // "https://orion.apiseeds.com/api/music/lyric/The%20Weeknd/Out%20My%20Name?apikey=qD6BUVcjASN840eoSKOkLMb1GilQNCN8jRdM8rJUNBnwF8tW0lnkHvNdDVOYJcHE",
+            `https://orion.apiseeds.com/api/music/lyric/${singerNameForLyrics}/${searchPhraseForLyricsNoName}?apikey={putyourownapikey}`,
+          
                 
                 obj => { 
                     lyricsParagraphTitle.innerHTML = obj.result.track.name;
@@ -33,7 +33,7 @@
                 }
             )
 
-            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchPhraseDelimited}&key=AIzaSyAn9TqGyVC8GpCsNfszZlckoFkiqWWF2CA`)
+            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchPhraseDelimited}&key={putyourownapikey}`)
             .then(resObj => resObj.json())
             .then(resObj => {
                 videoIdd = resObj.items[0].id.videoId;
